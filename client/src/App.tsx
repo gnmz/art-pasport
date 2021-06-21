@@ -1,11 +1,11 @@
+import EventsLocationList from "./components/EventsLocationList";
 
-const App:React.FC = () => {
-
+const App: React.FC = () => {
   return (
     <div>
-      Main Page
+      <EventsLocationList />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

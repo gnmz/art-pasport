@@ -15,6 +15,7 @@ export const fetchEventsLocation = () => {
         payload: response.data,
       });
     } catch (error) {
+      console.log(error)
       dispatch({
         type: EventsLocationActionType.FETCH_EVENTS_ERROR,
         payload: "Произошла зашибка при загрузке списка эвентов",
