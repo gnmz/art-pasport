@@ -18,13 +18,13 @@ const Login: React.FC = () => {
       <h1>Авторизация</h1>
       <div>
         <label>
-          <span>Логин:</span>
+          <span>Email:</span>
           <input type="text" value={email} onChange={loginHandler} />
         </label>
       </div>
       <div>
         <label>
-          <span>Пароль:</span>
+          <span>Password:</span>
           <input type="text" value={password} onChange={passwordHandler} />
         </label>
       </div>

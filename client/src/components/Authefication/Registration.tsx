@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { API_URL } from "../../config";
 
 const Registration: React.FC = () => {
   const [firstName, setFirstName] = useState("");
@@ -23,9 +24,9 @@ const Registration: React.FC = () => {
       email: email,
       password: password,
     };
-    // let respnose = null;
+    
     try {
-      let respnose = await axios.post("http://localhost:3001/reg", newUser);
+      let respnose = await axios.post(`${API_URL}reg`, newUser);
       alert(respnose.data.message);
     } catch (error) {}
   };
@@ -36,7 +37,7 @@ const Registration: React.FC = () => {
       <div>
         <div>
           <label>
-            <span>Имя</span>
+            <span>Name</span>
             <input type="text" value={firstName} onChange={firstNameHandler} />
           </label>
         </div>

@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 
+const PORT = process.env.PORT ||  3001;
+
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -271,6 +273,6 @@ app.get("/purchased-tickets", (req, res) => {});
 
 app.post("/purchased-tickets", (req, res) => {});
 
-app.listen(process.env.PORT || 3001, () => {
+app.listen(PORT, () => {
   console.log("Server is running");
 });

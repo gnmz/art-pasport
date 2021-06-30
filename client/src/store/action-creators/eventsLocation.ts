@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Dispatch } from "react";
+import { API_URL } from "../../config";
 import {
   EventsLocationAction,
   EventsLocationActionType,
@@ -9,16 +10,10 @@ export const fetchEventsLocation = () => {
   return async (dispatch: Dispatch<EventsLocationAction>) => {
     try {
       dispatch({ type: EventsLocationActionType.FETCH_EVENTS });
-      const response = await axios.get("http://localhost:3001/");
+      const response = await axios.get(API_URL);
       dispatch({
         type: EventsLocationActionType.FETCH_EVENTS_SUCCESS,
-        payload: response.data.sort((a:any, b:any) => {
-          if (a.startDate > b.startDate) {
-            return 1;
-          } else {
-            return -1;
-          }
-        }),
+        payload: response.data,
       });
     } catch (error) {
       dispatch({

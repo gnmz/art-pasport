@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Dispatch } from "react";
+import { API_URL } from "../../config";
 import { EventAction, EventActionType } from "../../types/event";
 
 export const fetchEvent = (id: string) => {
@@ -7,7 +8,7 @@ export const fetchEvent = (id: string) => {
     try {
       dispatch({ type: EventActionType.FETCH_EVENT });
       const response = await axios.get(
-        `http://localhost:3001/exhibitions/${id}`
+        `${API_URL}exhibitions/${id}`
       );
       dispatch({
         type: EventActionType.FETCH_EVENT_SUCCESS,
