@@ -12,10 +12,15 @@ export const fetchEventsLocation = () => {
       const response = await axios.get("http://localhost:3001/");
       dispatch({
         type: EventsLocationActionType.FETCH_EVENTS_SUCCESS,
-        payload: response.data,
+        payload: response.data.sort((a:any, b:any) => {
+          if (a.startDate > b.startDate) {
+            return 1;
+          } else {
+            return -1;
+          }
+        }),
       });
     } catch (error) {
-      console.log(error)
       dispatch({
         type: EventsLocationActionType.FETCH_EVENTS_ERROR,
         payload: "Произошла зашибка при загрузке списка эвентов",

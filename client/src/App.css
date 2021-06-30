@@ -1,0 +1,22 @@
+.app {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.event-list-action-btn {
+  width: 30%;
+  height: 30px;
+  background-color: #fff;
+  color: #4285f4;
+  border: 1px solid #4285f4;
+  padding: 5px;
+}
+
+.event-list-action-btn-active {
+  width: 30%;
+  height: 30px;
+  background-color: #4285f4;
+  color: #fff;
+  border: none;
+  padding: 5px;
+}

@@ -3,3 +3,10 @@
   padding: 0;
   box-sizing: border-box;
 }
+.event-location-card {
+  margin: 20px auto;
+  border: 1px solid gray;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}

@@ -1,0 +1,33 @@
+.event-card {
+  margin: 50px auto;
+  border: 1px solid #4285f4;
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 80vh;
+}
+
+.event-card-content {
+  flex: 0.9;
+}
+
+.event-card-return {
+  margin: 0 auto;
+  width: 100px;
+  padding: 5px;
+  background-color: #4285f4;
+  color: #fff;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.event-card-return:hover {
+  background-color: #4343f2;
+}
+
+.event-card-return:active {
+  position: relative;
+  top: 5px;
+}

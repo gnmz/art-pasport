@@ -2,9 +2,12 @@ import { useEffect } from "react";
 import { useActions } from "../hooks/useAction";
 import { useTypedSelector } from "../hooks/useTypedSelector";
 
-const EventsLocationList: React.FC = () => {
+import EventsListWrapper from "../components/EventsListWrapper/EventsListWrapper";
+
+const DefaultScreen: React.FC = () => {
   const { events, error, loading } = useTypedSelector((state) => state.events);
   const { fetchEventsLocation } = useActions();
+
   useEffect(() => {
     fetchEventsLocation();
   }, []);
@@ -19,17 +22,9 @@ const EventsLocationList: React.FC = () => {
 
   return (
     <div>
-      {events.map((item) => (
-        <div key={item.id}>
-          <h4>{item.title}</h4>
-          <p>{item.location}</p>
-          <p>
-            {item.startDate} - {item.endDate}
-          </p>
-        </div>
-      ))}
+      <EventsListWrapper events={events} />
     </div>
   );
 };
 
-export default EventsLocationList;
+export default DefaultScreen;

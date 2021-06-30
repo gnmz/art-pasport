@@ -1,0 +1,38 @@
+.event-list-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  border: 1px solid #4285f4;
+  margin-bottom: 10px;
+}
+
+.event-list-row-main {
+  width: 80%;
+}
+
+.event-list-row-description {
+  margin-left: 5px;
+  font-size: 15px;
+}
+
+.event-list-row-btn {
+  display: block;
+  text-align: center;
+  width: 100px;
+  padding: 5px;
+  border: 1px solid #4285f4;
+  background-color: #4285f4;
+  color: #fff;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.event-list-row-btn:hover {
+  background-color: #4343f2;
+}
+
+.event-list-row-btn:active {
+  position: relative;
+  top: 5px;
+}

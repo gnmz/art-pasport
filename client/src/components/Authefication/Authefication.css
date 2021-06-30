@@ -1,0 +1,50 @@
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.navbar a {
+  text-align: center;
+}
+
+.authefication-btn,
+.login-sbmt {
+  width: 110px;
+  padding: 5px;
+  background-color: #4285f4;
+  color: #fff;
+  font-weight: 700;
+  border: 1px solid #fff;
+  outline: none;
+  cursor: pointer;
+}
+
+.authefication-btn:hover,
+.login-sbmt:hover {
+  background-color: #4343f2;
+}
+
+.authefication-btn:active,
+.login-sbmt:active {
+  position: relative;
+  top: 3px;
+  transition: 0.2s;
+}
+
+.login,
+.registration {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.login div,
+.registration div {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.login label span,
+.registration label span {
+  display: block;
+}
