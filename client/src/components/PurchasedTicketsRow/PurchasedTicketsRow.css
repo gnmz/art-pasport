@@ -1,0 +1,19 @@
+.purchased-tickets-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border: 1px solid #4285f4;
+  margin-bottom: 10px;
+}
+
+.purchased-tickets-row-main {
+  width: 80%;
+}
+
+.purchased-tickets-row-title {
+}
+
+.purchased-tickets-row-description {
+  margin-left: 5px;
+  font-size: 15px;
+}

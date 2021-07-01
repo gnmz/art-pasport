@@ -23,6 +23,7 @@ const EventListRow: React.FC<IEventListRowProps> = (props) => {
         <Link to={`/exhibitions/${id}`} className="event-list-row-btn">
           Подробнее
         </Link>
+        {localStorage.token && <Link to={`/buy-event-card/${id}`} className="event-list-row-btn">Оформить билет</Link>}
       </div>
     </div>
   );

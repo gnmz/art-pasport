@@ -3,13 +3,14 @@ import { useActions } from "../hooks/useAction";
 import { useTypedSelector } from "../hooks/useTypedSelector";
 
 import EventsListWrapper from "../components/EventsListWrapper/EventsListWrapper";
+import PurchasedTickets from '../components/PurchasedTicketsList/PurchasedTicketsList'
 import { useState } from "react";
 
 const UserScreen: React.FC = () => {
   const { events, error, loading } = useTypedSelector((state) => state.events);
   const { currentUser, isAuth } = useTypedSelector((state) => state.auth);
   const { fetchEventsLocation } = useActions();
-  const { favoritesList }: any = currentUser;
+  const { favoritesList, purchasedTickets }: any = currentUser;
 
   const [isDefaultList, setIsDefaultList] = useState(true);
   const [isFavoriteList, setIsFavoriteList] = useState(false);
@@ -82,7 +83,11 @@ const UserScreen: React.FC = () => {
         >
           Избранное
         </button>
-        <button style={{ width: "30%" }}>Купленные</button>
+        <button className={
+            isPurchasedTicketsList
+              ? "event-list-action-btn-active"
+              : "event-list-action-btn"
+          } style={{ width: "30%" }} onClick={()=>chooseListView('purchased')}>Купленные</button>
       </div>
       {isDefaultList && <EventsListWrapper events={events} />}
       {isFavoriteList && (
@@ -96,6 +101,9 @@ const UserScreen: React.FC = () => {
           )}
         </>
       )}
+      {isPurchasedTicketsList && <PurchasedTickets purchasedTickets={purchasedTickets} />}
+
+
     </div>
   );
 };

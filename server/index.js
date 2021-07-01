@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 
-const PORT = process.env.PORT ||  3001;
+const PORT = process.env.PORT || 3001;
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -124,6 +124,10 @@ const data = [
     price: 100,
     startDate: `18.06.2021`,
     endDate: `25.07.2021`,
+    tickets: [
+      { id: 1, serialNumber: "2202123456" },
+      { id: 2, serialNumber: "1234567895" },
+    ],
   },
   {
     id: 2,
@@ -201,7 +205,7 @@ app.get("/auth", (req, res) => {
 app.post("/login", async (req, res) => {
   const { email, password } = req.body.user;
 
-  const checkUser = await userList.find((user) => user.email === email);
+  const checkUser = await userList.find((user) => user.email.toLowerCase() === email.toLowerCase());
   const isPassValid = bcrypt.compareSync(password, checkUser.password);
   if (checkUser && isPassValid) {
     const token = jwt.sign({ id: checkUser.id }, secretKey, {
@@ -257,21 +261,44 @@ app.get("/favorites", (req, res) => {
   }
 });
 
-app.delete("/favorites", (req, res) => {
-  const userID = +req.query.userID;
-  const favoriteID = +req.query.favoriteID;
-  const checkUser = userList.find((user) => user.id === userID);
-  if (checkUser) {
-    checkUser.favoritesList = checkUser.favoritesList.filter(
-      (item) => item.id !== favoriteID
-    );
-    res.send({ message: "Удалено из избранного" });
-  }
-});
+// app.delete("/favorites", (req, res) => {
+//   const userID = +req.query.userID;
+//   const favoriteID = +req.query.favoriteID;
+//   const checkUser = userList.find((user) => user.id === userID);
+//   if (checkUser) {
+//     checkUser.favoritesList = checkUser.favoritesList.filter(
+//       (item) => item.id !== favoriteID
+//     );
+//     res.send({ message: "Удалено из избранного" });
+//   }
+// });
 
 app.get("/purchased-tickets", (req, res) => {});
 
-app.post("/purchased-tickets", (req, res) => {});
+app.post("/purchased-tickets", (req, res) => {
+  const currentToken = req.headers.authorization.split(" ")[1];
+
+  if (currentToken === "null") {
+    return;
+  }
+
+  const decode = jwt.verify(currentToken, secretKey);
+  const userID = decode.id;
+
+  const checkUser = userList.find((user) => user.id === userID)
+
+  const payment = req.body.payment;
+  const findEvent = data.find((item) => item.title === payment.exhibitionName);
+  const findTicket = findEvent.tickets.find(
+    (item) => item.serialNumber === payment.serialNumber
+  );
+  if (findTicket) {
+    findEvent.tickets = findEvent.tickets.filter(
+      (item) => item.serialNumber !== payment.serialNumber
+    );
+    checkUser.purchasedTickets.push(payment)
+  }
+});
 
 app.listen(PORT, () => {
   console.log("Server is running");

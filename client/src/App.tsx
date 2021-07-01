@@ -12,6 +12,7 @@ import EventCard from "./components/EventCard/EventCard";
 import { useTypedSelector } from "./hooks/useTypedSelector";
 import { useActions } from "./hooks/useAction";
 import { useEffect } from "react";
+import BuyEventCard from "./components/BuyEventCard/BuyEventCard";
 
 const App: React.FC = () => {
   const { isAuth, currentUser } = useTypedSelector((state) => state.auth);
@@ -40,6 +41,7 @@ const App: React.FC = () => {
       <Route path="/login" exact component={Login} />
       <Route path="/registration" exact component={Registration} />
       <Route path="/exhibitions/:id" exact component={EventCard} />
+      <Route path="/buy-event-card/:id" exact component={BuyEventCard} />
     </div>
   );
 };

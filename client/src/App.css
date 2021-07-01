@@ -22,3 +22,8 @@
   padding: 5px;
   cursor: pointer;
 }
+@media screen and (min-width: 320px) and (max-width: 991px) {
+  .app {
+    width: 100%;
+  }
+}

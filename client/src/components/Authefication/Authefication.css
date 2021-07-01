@@ -48,3 +48,14 @@
 .registration label span {
   display: block;
 }
+
+@media screen and (min-width: 320px) and (max-width: 991px) {
+  .authefication {
+    flex-direction: column;
+  }
+
+  .authefication-btn {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+}
