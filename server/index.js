@@ -18,9 +18,9 @@ app.use(express.urlencoded({ extended: true }));
 const userList = [
   {
     id: 1,
-    firstName: "john",
+    firstName: "Иван",
     password: "$2a$08$M7PXSFlSLbjXxxRl5.Eo6.uWR2FMpFGgS/b9/W2MdCUr8.osLjZ2e",
-    email: "john",
+    email: "ivan",
     role: "user",
     favoritesList: [
       {
@@ -65,9 +65,8 @@ const userList = [
 const companyList = [
   {
     id: 1,
-    login: "vinzavod",
-    password: "vinzavod",
-    email: "vinzavod@index.ru",
+    password: "$2a$08$2yklEIKX.VsJpj2.8Qq3HOAlmhP35VsvbRmAmvyml72/ea69aZdFu",
+    email: "vinzavod",
     title: "Центр современного искусства Винзавод",
     address: "Москва, 4-й Сыромятнический переулок, 1/8",
     phone: "+7 (495) 917 17 99",
@@ -84,9 +83,8 @@ const companyList = [
   },
   {
     id: 2,
-    login: "WIP",
-    password: "WIP",
-    email: "WIP@index.ru",
+    password: "$2a$08$nwiQ3TBgWV5kFj4pHOxbD.WeUUHY117jb2akQjkZlPq6RkySP5QiO",
+    email: "WIP",
     title: "Центр современного искусства Винзавод",
     address: "Москва, Яузский бул., 11",
     phone: "",
@@ -194,24 +192,74 @@ app.get("/auth", (req, res) => {
     return;
   }
   const decode = jwt.verify(currentToken, secretKey);
+  console.log(decode);
   const userID = decode.id;
+  const email = decode.email;
 
-  const checkUser = userList.find((user) => user.id === userID);
-
-  const token = jwt.sign({ id: checkUser.id }, secretKey, { expiresIn: "12h" });
-  res.json({ token, user: { ...checkUser } });
+  const checkUser = userList.find(
+    (user) => user.id === userID && user.email === email
+  );
+  if (checkUser) {
+    const token = jwt.sign(
+      { id: checkUser.id, email: checkUser.email },
+      secretKey,
+      { expiresIn: "12h" }
+    );
+    res.json({ token, user: { ...checkUser } });
+  }
+  const checkCompany = companyList.find(
+    (company) => company.id === userID && company.email === email
+  );
+  if (checkCompany) {
+    const token = jwt.sign(
+      { id: checkCompany.id, email: checkCompany.email },
+      secretKey,
+      { expiresIn: "12h" }
+    );
+    res.json({ token, user: { ...checkCompany, firstName: checkCompany.title, } });
+  }
 });
 
 app.post("/login", async (req, res) => {
-  const { email, password } = req.body.user;
+  const { email, password, role } = req.body.user;
 
-  const checkUser = await userList.find((user) => user.email.toLowerCase() === email.toLowerCase());
-  const isPassValid = bcrypt.compareSync(password, checkUser.password);
-  if (checkUser && isPassValid) {
-    const token = jwt.sign({ id: checkUser.id }, secretKey, {
-      expiresIn: "12h",
-    });
-    res.json({ token, user: { ...checkUser } });
+  if (role === "user") {
+    const checkUser = await userList.find(
+      (user) => user.email.toLowerCase() === email.toLowerCase()
+    );
+    const isPassValid = bcrypt.compareSync(password, checkUser.password);
+    if (checkUser && isPassValid) {
+      const token = jwt.sign(
+        { id: checkUser.id, email: checkUser.email },
+        secretKey,
+        {
+          expiresIn: "12h",
+        }
+      );
+      res.json({ token, user: { ...checkUser } });
+    }
+  }
+  if (role === "company") {
+    const checkCompany = await companyList.find(
+      (company) => company.email.toLowerCase() === email.toLowerCase()
+    );
+
+    const isPassValid = bcrypt.compareSync(password, checkCompany.password);
+
+    if (checkCompany && isPassValid) {
+      const token = jwt.sign(
+        { id: checkCompany.id, email: checkCompany.email },
+        secretKey,
+        {
+          expiresIn: "12h",
+        }
+      );
+
+      res.json({
+        token,
+        user: { firstName: checkCompany.title, ...checkCompany },
+      });
+    }
   }
 });
 
@@ -232,24 +280,49 @@ app.post(
     // }
 
     const newUser = req.body;
-    const checked = await userList.find((user) => user.email === newUser.email);
-    if (checked) {
-      res.send({ message: "Пользователь с такой почтой уже существует" });
+    if (newUser.role === "user") {
+      const checked = await userList.find(
+        (user) => user.email.toLowerCase() === newUser.email.toLowerCase()
+      );
+      if (checked) {
+        res.send({ message: "Пользователь с такой почтой уже существует" });
+      }
+
+      const hashPassword = await bcrypt.hash(newUser.password, 8);
+      const user = {
+        id: userList.length + 1,
+        firstName: newUser.firstName,
+        password: hashPassword,
+        email: newUser.email,
+        role: newUser.role,
+        favoritesList: [],
+        purchasedTickets: [],
+      };
+      userList.push(user);
+      res.send({ message: "Пользователь успешно зарегестрирован" });
     }
+    if (newUser.role === "company") {
+      const checkCompany = companyList.find(
+        (user) => user.email.toLowerCase() === newUser.email.toLowerCase()
+      );
+      if (checkCompany) {
+        res.send({ message: "Пользователь с такой почтой уже существует" });
+      }
 
-    const hashPassword = await bcrypt.hash(newUser.password, 8);
-    const user = {
-      id: userList.length + 1,
-      firstName: newUser.firstName,
-      password: hashPassword,
-      email: newUser.email,
-      role: "user",
-      favoritesList: [],
-      purchasedTickets: [],
-    };
-
-    userList.push(user);
-    res.send({ message: "Пользователь успешно зарегестрирован" });
+      const hashPassword = await bcrypt.hash(newUser.password, 8);
+      const company = {
+        id: companyList.length + 1,
+        email: newUser.email,
+        password: hashPassword,
+        title: "",
+        address: "",
+        phone: "",
+        role: newUser.role,
+        exhibitions: [],
+      };
+      companyList.push(company);
+      res.send({ message: "Организация успешно зарегестрирована" });
+    }
   }
 );
 
@@ -285,7 +358,7 @@ app.post("/purchased-tickets", (req, res) => {
   const decode = jwt.verify(currentToken, secretKey);
   const userID = decode.id;
 
-  const checkUser = userList.find((user) => user.id === userID)
+  const checkUser = userList.find((user) => user.id === userID);
 
   const payment = req.body.payment;
   const findEvent = data.find((item) => item.title === payment.exhibitionName);
@@ -296,7 +369,7 @@ app.post("/purchased-tickets", (req, res) => {
     findEvent.tickets = findEvent.tickets.filter(
       (item) => item.serialNumber !== payment.serialNumber
     );
-    checkUser.purchasedTickets.push(payment)
+    checkUser.purchasedTickets.push(payment);
   }
 });
 

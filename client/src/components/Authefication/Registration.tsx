@@ -6,6 +6,7 @@ const Registration: React.FC = () => {
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("user");
 
   const firstNameHandler: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setFirstName(e.target.value);
@@ -18,13 +19,17 @@ const Registration: React.FC = () => {
     setPassword(e.target.value);
   };
 
+  const onChangeRole: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setRole(e.target.value);
+  };
+
   const registration = async () => {
     const newUser = {
       firstName: firstName,
       email: email,
       password: password,
+      role: role,
     };
-    
     try {
       let respnose = await axios.post(`${API_URL}reg`, newUser);
       alert(respnose.data.message);
@@ -34,13 +39,29 @@ const Registration: React.FC = () => {
   return (
     <div className="registration">
       <h1>Регистрация</h1>
+      <div className="regstration-role" onChange={onChangeRole}>
+        <label>
+          <span>Пользователь</span>
+          <input type="radio" value="user" name="role" defaultChecked />
+        </label>
+        <label>
+          <span>Компания</span>
+          <input type="radio" value="company" name="role" />
+        </label>
+      </div>
       <div>
-        <div>
-          <label>
-            <span>Name</span>
-            <input type="text" value={firstName} onChange={firstNameHandler} />
-          </label>
-        </div>
+        {role === "user" && (
+          <div>
+            <label>
+              <span>Name</span>
+              <input
+                type="text"
+                value={firstName}
+                onChange={firstNameHandler}
+              />
+            </label>
+          </div>
+        )}
         <div>
           <label>
             <span>Email</span>

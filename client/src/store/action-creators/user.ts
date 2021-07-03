@@ -3,10 +3,10 @@ import { Dispatch } from "react";
 import { UserAction, UserActionType } from "../../types/user";
 import { API_URL } from "../../config";
 
-export const login = (email: string, password: string) => {
+export const login = (email: string, password: string, role: string) => {
   return async (dispatch: Dispatch<UserAction>) => {
     try {
-      let user = { email: email, password: password };
+      let user = { email: email, password: password, role: role };
       const response = await axios.post(`${API_URL}login`, {
         user,
       });
