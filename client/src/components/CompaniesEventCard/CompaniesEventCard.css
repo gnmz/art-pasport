@@ -1,0 +1,96 @@
+.companes-event-card {
+  margin: 50px auto;
+  border: 1px solid #4285f4;
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 80vh;
+  position: relative;
+}
+
+.add-ticket {
+  position: absolute;
+  padding: 10px 20px;
+  background-color: rgba(235, 235, 235, 1);
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.add-ticket-close-btn {
+  background-color: #fff;
+  border: none;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.add-ticket-close-btn:hover {
+  color: #4343f2;
+}
+
+.add-ticket-close-btn:active {
+  position: relative;
+  top: 3px;
+}
+
+.add-ticket-input {
+  width: 300px;
+  padding: 5px 10px;
+  margin: 5px 0;
+}
+
+.add-ticket-publish {
+  margin: 0 auto;
+  width: 200px;
+  padding: 10px;
+}
+
+.add-ticket-one-more-btn {
+  background-color: lightgray;
+  border: none;
+  margin: 20px 0 20px 90px;
+  padding: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.add-ticket-one-more-btn:hover {
+  color: #4343f2;
+}
+
+.add-ticket-one-more-btn:active {
+  position: relative;
+  top: 3px;
+}
+
+.add-ticket-btn {
+  margin: 20px auto;
+  width: 200px;
+  padding: 20px 10px;
+  background-color: #4285f4;
+  color: #fff;
+  font-weight: 700;
+  border: 1px solid #fff;
+  outline: none;
+  cursor: pointer;
+}
+
+.add-ticket-btn:hover {
+  background-color: #4343f2;
+}
+
+.add-ticket-btn:active {
+  position: relative;
+  top: 5px;
+}
+
+.add-tickets-content {
+  margin: 0 auto;
+  width: 80%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}

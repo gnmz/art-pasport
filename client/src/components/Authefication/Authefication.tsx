@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { useActions } from "../../hooks/useAction";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 
 import "./Authefication.css";
 
 const Authefication: React.FC = () => {
-  const { isAuth, currentUser }:any = useTypedSelector((state) => state.auth);
+  const { isAuth, currentUser }: any = useTypedSelector((state) => state.auth);
   const { logout } = useActions();
   return (
     <div
@@ -33,6 +33,7 @@ const Authefication: React.FC = () => {
           </button>
         </>
       )}
+      {/* {isAuth ? <Redirect to="/" /> : null} */}
     </div>
   );
 };

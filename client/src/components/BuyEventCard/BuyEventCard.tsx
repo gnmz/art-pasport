@@ -15,6 +15,7 @@ const BuyEventCard: React.FC = () => {
   const { fetchEvent, auth } = useActions();
   const params = useParams<IBuyEventCardParams>();
   const [cardNumber, setCardNumber] = useState("");
+  const [startPayment, setStartPayment] = useState(false)
 
   const { title, location, startDate, endDate, price, tickets }: any = event;
   const { firstName }: any = currentUser;
@@ -37,15 +38,25 @@ const BuyEventCard: React.FC = () => {
       price: price,
       isPurchased: true,
     };
-    let response = axios.post(
-      `${API_URL}purchased-tickets`,
-      { payment },
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
-    auth();
+    console.log(payment)
+    startOfPayment()
+
+    // let response = axios.post(
+    //   `${API_URL}purchased-tickets`,
+    //   { payment },
+    //   {
+    //     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    //   }
+    // );
+    // auth();
   };
+
+  const startOfPayment = () => {
+    setStartPayment(true)
+    setTimeout(() => {
+      setStartPayment(false)
+    }, 2000);
+  }
 
   return (
     <div className="buy-event-card">
@@ -59,6 +70,9 @@ const BuyEventCard: React.FC = () => {
             </p>
             <p>{price ? `Стоимость: ${price} руб ` : `Вход бесплатный`}</p>
           </div>
+          {startPayment? <p>Начало платежа </p>:
+          
+          
           <div
             style={{
               display: "flex",
@@ -87,7 +101,7 @@ const BuyEventCard: React.FC = () => {
             <p>Сумма оплаты: {price}</p>
 
             <button onClick={payment}>Оплатить</button>
-          </div>
+          </div>}
         </>
       ) : (
         <>

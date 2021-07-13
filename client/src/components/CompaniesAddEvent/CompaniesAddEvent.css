@@ -1,0 +1,8 @@
+.add-event span {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.add-event label {
+  margin-bottom: 10px;
+}

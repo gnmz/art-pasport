@@ -77,7 +77,11 @@ const companyList = [
         title: "Выставочная программа Винзавод.Open",
         startDate: "18.06.2021",
         endDate: "25.07.2021",
-        tickets: [{ id: 1, serialNumber: "", price: 100 }],
+        price: 100,
+        tickets: [
+          { id: 1, serialNumber: "2202123456", isPurchased: false },
+          { id: 2, serialNumber: "1234567895", isPurchased: false },
+        ],
       },
     ],
   },
@@ -95,9 +99,11 @@ const companyList = [
         title: "Выставка Варвары Васильевой",
         startDate: "22.07.2021",
         endDate: "22.07.2021",
+        price: 2000,
         tickets: [
-          { id: 1, serialNumber: "", price: null },
-          { id: 2, serialNumber: "", price: null },
+          { id: 1, serialNumber: "456123", price: null, isPurchased: false },
+          { id: 2, serialNumber: "321789", price: null, isPurchased: false },
+          { id: 3, serialNumber: "123456", price: null, isPurchased: true },
         ],
       },
       {
@@ -175,6 +181,75 @@ app.get("/exhibitions/:id", (req, res) => {
   res.send(JSON.stringify(exhibition));
 });
 
+app.get("/companies-events/:id", (req, res) => {
+  const currentToken = req.headers.authorization.split(" ")[1];
+  const id = +req.params.id;
+
+  if (currentToken === "null") {
+    return;
+  }
+
+  const decode = jwt.verify(currentToken, secretKey);
+  const userID = decode.id;
+  const email = decode.email;
+
+  const checkCompany = companyList.find(
+    (company) => company.id === userID && company.email === email
+  );
+
+  if (checkCompany) {
+    let match = checkCompany.exhibitions.find((item) => item.id === id);
+    res.send(JSON.stringify(match));
+  }
+});
+
+app.post("/publish-tickets", (req, res) => {
+  const currentToken = req.headers.authorization.split(" ")[1];
+  const { title, tickets } = req.body;
+
+  if (currentToken === "null") {
+    return;
+  }
+
+  const decode = jwt.verify(currentToken, secretKey);
+  const companyID = decode.id;
+  const email = decode.email;
+
+  const checkCompany = companyList.find(
+    (company) => company.id === companyID && company.email === email
+  );
+
+  if (checkCompany) {
+    const findExhibition = checkCompany.exhibitions.find(
+      (item) => item.title === title
+    );
+
+    if (findExhibition) {
+      let id = findExhibition.tickets.length + 1;
+
+      const updateArr = tickets.map((item) => {
+        if (item.id === "") {
+          item.id = id;
+          id++;
+        }
+        return item;
+      });
+
+      //Проверка на похожие серийные номера билетов
+      // let list1 = [...findExhibition.tickets];
+      // let list2 = [...updateArr];
+
+      // const list3 = list1.filter((x) =>
+      //   list2.some((y) => x.serialNumber === y.serialNumber)
+      // );
+     
+
+      let newArr = findExhibition.tickets.concat(updateArr);
+      findExhibition.tickets = [...newArr]
+    }
+  }
+});
+
 app.post("/favorites", (req, res) => {
   const { userID, favorite } = req.body;
   const checkUser = userList.find((user) => user.id === userID);
@@ -192,7 +267,6 @@ app.get("/auth", (req, res) => {
     return;
   }
   const decode = jwt.verify(currentToken, secretKey);
-  console.log(decode);
   const userID = decode.id;
   const email = decode.email;
 
@@ -216,7 +290,10 @@ app.get("/auth", (req, res) => {
       secretKey,
       { expiresIn: "12h" }
     );
-    res.json({ token, user: { ...checkCompany, firstName: checkCompany.title, } });
+    res.json({
+      token,
+      user: { ...checkCompany, firstName: checkCompany.title },
+    });
   }
 });
 
@@ -333,20 +410,6 @@ app.get("/favorites", (req, res) => {
     res.send(checkUser.favoritesList);
   }
 });
-
-// app.delete("/favorites", (req, res) => {
-//   const userID = +req.query.userID;
-//   const favoriteID = +req.query.favoriteID;
-//   const checkUser = userList.find((user) => user.id === userID);
-//   if (checkUser) {
-//     checkUser.favoritesList = checkUser.favoritesList.filter(
-//       (item) => item.id !== favoriteID
-//     );
-//     res.send({ message: "Удалено из избранного" });
-//   }
-// });
-
-app.get("/purchased-tickets", (req, res) => {});
 
 app.post("/purchased-tickets", (req, res) => {
   const currentToken = req.headers.authorization.split(" ")[1];
